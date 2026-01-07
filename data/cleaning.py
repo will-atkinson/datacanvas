@@ -44,14 +44,41 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     # Remove empty columns
     out = out.dropna(axis=1, how="all")
 
-    # Try to parse datelike columns (lightweight heuristic)
-    for col in out.columns[: min(len(out.columns), 20)]:
+    # Try to parse datelike columns (improved heuristic)
+    for col in out.columns:  # Check ALL columns, not just first 20
         if out[col].dtype == "object":
-            sample = out[col].dropna().astype(str).head(50)
+            sample = out[col].dropna().astype(str).head(100)  # Increased sample size
             if sample.empty:
                 continue
-            parsed = pd.to_datetime(sample, errors="coerce", dayfirst=True)
-            if parsed.notna().mean() >= 0.6:
-                out[col] = pd.to_datetime(out[col], errors="coerce", dayfirst=True)
+
+            # Try multiple date parsing strategies
+            best_parsed = None
+            best_success_rate = 0.0
+
+            # Strategy 1: ISO format (2024-01-15) - don't use dayfirst
+            parsed = pd.to_datetime(sample, errors="coerce", format="mixed")
+            success_rate = parsed.notna().mean()
+            if success_rate > best_success_rate:
+                best_parsed = parsed
+                best_success_rate = success_rate
+
+            # Strategy 2: Day-first format (15/01/2024 or 15-01-2024)
+            if best_success_rate < 0.8:  # Only try if first strategy wasn't great
+                parsed = pd.to_datetime(sample, errors="coerce", dayfirst=True)
+                success_rate = parsed.notna().mean()
+                if success_rate > best_success_rate:
+                    best_parsed = parsed
+                    best_success_rate = success_rate
+
+            # Apply if we got at least 50% success rate (lowered threshold)
+            if best_success_rate >= 0.5:
+                # Apply the best strategy to the full column
+                if best_parsed is not None:
+                    # Determine which strategy worked best and apply to full column
+                    parsed_full = pd.to_datetime(out[col], errors="coerce", format="mixed")
+                    if parsed_full.notna().mean() < best_success_rate - 0.1:
+                        # Try dayfirst if mixed format didn't work well
+                        parsed_full = pd.to_datetime(out[col], errors="coerce", dayfirst=True)
+                    out[col] = parsed_full
 
     return out
