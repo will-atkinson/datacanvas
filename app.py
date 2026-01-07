@@ -87,10 +87,10 @@ def main() -> None:
     report_bytes = render_report_stub(report_title, kpis, df)
 
     st.download_button(
-        label="Download report (stub)",
+        label="Download PDF Report",
         data=report_bytes,
-        file_name="management_report.txt",  # change to .pdf when you implement PDF
-        mime="text/plain",
+        file_name="management_report.pdf",
+        mime="application/pdf",
     )
 
     with st.expander("Debug: cleaned dataframe preview"):
