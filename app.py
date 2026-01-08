@@ -15,166 +15,391 @@ from export import render_report_stub
 
 
 def apply_custom_css() -> None:
-    """Apply custom CSS styling for a professional look."""
+    """Apply premium custom CSS styling with glassmorphism and advanced effects."""
     st.markdown("""
         <style>
-        /* Import professional font */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        /* Import premium fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        /* Global styling */
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Global styling with premium font stack */
         html, body, [class*="css"] {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Main content area */
+        /* Premium animated gradient background */
         .main {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            position: relative;
         }
 
-        /* Header styling */
+        .main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(100px);
+            z-index: 0;
+        }
+
+        .main > div {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Premium header styling with text gradient */
         h1 {
-            color: #1e3a8a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            padding-bottom: 1rem;
+            border-bottom: 4px solid transparent;
+            border-image: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-image-slice: 1;
+            margin-bottom: 1.5rem;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.3)); }
+            50% { filter: drop-shadow(0 0 16px rgba(102, 126, 234, 0.5)); }
+        }
+
+        h2 {
+            color: #1e40af;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid #3b82f6;
+            margin-top: 2.5rem;
             margin-bottom: 1rem;
+            letter-spacing: -0.5px;
         }
 
-        h2, h3 {
-            color: #1e40af;
+        h3 {
+            color: #4f46e5;
             font-weight: 600;
-            margin-top: 2rem;
+            letter-spacing: -0.3px;
         }
 
-        /* Card-like containers */
+        /* Glassmorphism cards */
         .stContainer {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
             margin: 1rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Metric cards */
-        [data-testid="stMetricValue"] {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1e40af;
+        .stContainer:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 16px 48px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
-        [data-testid="stMetricLabel"] {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* File uploader */
-        [data-testid="stFileUploader"] {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 2px dashed #3b82f6;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        [data-testid="stFileUploader"]:hover {
-            border-color: #2563eb;
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.15);
-        }
-
-        /* Buttons */
-        .stButton > button {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
+        /* Premium metric cards with gradient borders */
+        div[data-testid="metric-container"] {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
             transition: all 0.3s ease;
         }
 
-        .stButton > button:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.35);
-            transform: translateY(-2px);
+        div[data-testid="metric-container"]::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        div[data-testid="metric-container"]:hover::before {
+            opacity: 1;
+        }
+
+        div[data-testid="metric-container"]:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+        }
+
+        [data-testid="stMetricValue"] {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        [data-testid="stMetricLabel"] {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Premium file uploader with pulsing effect */
+        [data-testid="stFileUploader"] {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 3px dashed #667eea;
+            box-shadow:
+                0 8px 32px rgba(102, 126, 234, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-testid="stFileUploader"]::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        [data-testid="stFileUploader"]:hover {
+            border-color: #764ba2;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(102, 126, 234, 0.25);
+        }
+
+        /* Premium buttons with shine effect */
+        .stButton > button, .stDownloadButton > button {
+            position: relative;
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        .stButton > button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow:
+                0 4px 15px rgba(102, 126, 234, 0.4),
+                0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .stDownloadButton > button {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            box-shadow:
+                0 4px 15px rgba(17, 153, 142, 0.4),
+                0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .stButton > button::before,
+        .stDownloadButton > button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .stButton > button:hover::before,
+        .stDownloadButton > button:hover::before {
+            left: 100%;
+        }
+
+        .stButton > button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 8px 25px rgba(102, 126, 234, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .stDownloadButton > button:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.35);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 8px 25px rgba(17, 153, 142, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Sidebar styling */
+        /* Premium sidebar with glassmorphism */
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            background: linear-gradient(180deg, rgba(30, 58, 138, 0.95) 0%, rgba(30, 64, 175, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         [data-testid="stSidebar"] h1,
         [data-testid="stSidebar"] h2,
         [data-testid="stSidebar"] h3,
         [data-testid="stSidebar"] p,
-        [data-testid="stSidebar"] label {
+        [data-testid="stSidebar"] label,
+        [data-testid="stSidebar"] .caption {
             color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* Info/Warning boxes */
+        /* Premium alert boxes */
         .stAlert {
-            border-radius: 8px;
+            border-radius: 12px;
             border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        /* DataFrames */
+        /* Premium dataframes */
         [data-testid="stDataFrame"] {
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.12),
+                0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        /* Text input */
+        /* Premium text input */
         .stTextInput > div > div > input {
-            border-radius: 8px;
+            border-radius: 12px;
             border: 2px solid #e2e8f0;
-            padding: 0.75rem;
+            padding: 1rem;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .stTextInput > div > div > input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #667eea;
+            box-shadow:
+                0 0 0 4px rgba(102, 126, 234, 0.1),
+                0 4px 12px rgba(102, 126, 234, 0.15);
+            background: white;
+            transform: translateY(-2px);
         }
 
-        /* Expander */
+        /* Premium expander */
         .streamlit-expanderHeader {
-            background-color: #f8fafc;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #1e40af;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            font-weight: 700;
+            color: #4f46e5;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
         }
 
-        /* Spinner */
+        .streamlit-expanderHeader:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: translateX(4px);
+        }
+
+        /* Premium spinner */
         .stSpinner > div {
-            border-top-color: #3b82f6;
+            border-top-color: #667eea;
+            border-right-color: #764ba2;
         }
 
-        /* Remove padding from top */
+        /* Premium success message */
+        .stSuccess {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #10b981;
+        }
+
+        /* Refined spacing */
         .block-container {
             padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Subtle animations for content */
+        [data-testid="stVerticalBlock"] > div {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Premium scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
         </style>
     """, unsafe_allow_html=True)
