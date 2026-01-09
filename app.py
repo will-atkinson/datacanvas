@@ -424,18 +424,30 @@ def sidebar_controls() -> None:
 
 def main() -> None:
     """Main application entry point."""
+    # Check if custom logo exists
+    import os
+    logo_path = "assets/logo.png"
+    has_logo = os.path.exists(logo_path)
+
     st.set_page_config(
         page_title=CFG.app_name,
         layout="wide",
-        page_icon="📊",
+        page_icon=logo_path if has_logo else "🎨",
         initial_sidebar_state="expanded"
     )
 
     apply_custom_css()
     sidebar_controls()
 
-    # Header with better styling
-    st.markdown(f"# 📊 {CFG.app_name}")
+    # Header with logo and styling
+    if has_logo:
+        col1, col2 = st.columns([1, 10])
+        with col1:
+            st.image(logo_path, width=80)
+        with col2:
+            st.markdown(f"# {CFG.app_name}", unsafe_allow_html=True)
+    else:
+        st.markdown(f"# 📊 {CFG.app_name}")
     st.markdown(
         """
         <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
